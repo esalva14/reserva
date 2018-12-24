@@ -38,60 +38,60 @@ public class MainActivity extends AppCompatActivity {
             actionBar.setHomeButtonEnabled(false);
         }*/
     }
-/*
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        android.os.Debug.stopMethodTracing();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        ContentValues values = new ContentValues();
-        values.put(NotePad.Notes.COLUMN_NAME_NOTE, getCurrentNoteText());
-        values.put(NotePad.Notes.COLUMN_NAME_TITLE, getCurrentNoteTitle());
-
-        getContentResolver().update(
-                mUri,    // The URI for the note to update.
-                values,  // The map of column names and new values to apply to them.
-                null,    // No SELECT criteria are used.
-                null     // No WHERE columns are used.
-        )
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        LocationManager locationManager =
-                (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-        if (!gpsEnabled) {
-            // Create a dialog here that requests the user to enable GPS, and use an intent
-            // with the android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS action
-            // to take the user to the Settings screen to enable GPS when they click "OK"
+    /*
+        @Override
+        public void onDestroy() {
+            super.onDestroy();
+            android.os.Debug.stopMethodTracing();
         }
-    }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-    }
-*/
-    public void Entrar(View view) {
+        @Override
+        public void onPause() {
+            super.onPause();
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+        }
+
+        @Override
+        protected void onStop() {
+            super.onStop();
+
+            ContentValues values = new ContentValues();
+            values.put(NotePad.Notes.COLUMN_NAME_NOTE, getCurrentNoteText());
+            values.put(NotePad.Notes.COLUMN_NAME_TITLE, getCurrentNoteTitle());
+
+            getContentResolver().update(
+                    mUri,    // The URI for the note to update.
+                    values,  // The map of column names and new values to apply to them.
+                    null,    // No SELECT criteria are used.
+                    null     // No WHERE columns are used.
+            )
+        }
+
+        @Override
+        protected void onStart() {
+            super.onStart();
+
+            LocationManager locationManager =
+                    (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+            if (!gpsEnabled) {
+                // Create a dialog here that requests the user to enable GPS, and use an intent
+                // with the android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS action
+                // to take the user to the Settings screen to enable GPS when they click "OK"
+            }
+        }
+
+        @Override
+        protected void onRestart() {
+            super.onRestart();
+        }
+    */
+    public void Entrar() {
         Intent intent = new Intent(this, Usuari.class);
         EditText editText = (EditText) findViewById(R.id.editText);
         String contra = editText.getText().toString();
@@ -105,7 +105,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void connectServer(View v) {
-        new login(this).execute("http://192.168.43.187:9000/Application/login?nom=lola&telf=3456789");
+
+        System.out.println("connectServer()");
+
+        //Aqui s'ha de posar la Ip de la xarxa local on estigui el Play.
+        new login(this).execute("http://192.168.1.39:9000/message");
 
     }
 
@@ -122,8 +126,11 @@ public class MainActivity extends AppCompatActivity {
 
         protected String doInBackground(String... urls) {
             try {
+
+                System.out.println("doInBackground()");
                 String query = String.format(urls[0]);
                 URL url = new URL(query);
+                System.out.println(url);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setReadTimeout(10000);
                 conn.setConnectTimeout(15000 /* milliseconds */);
@@ -143,6 +150,8 @@ public class MainActivity extends AppCompatActivity {
                     sb.append(line);
                 }
                 result = sb.toString();
+                System.out.println("Result ->");
+                System.out.println(result);
 
                 Log.i("login", result);
 
@@ -155,22 +164,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
-            EditText n = (EditText) findViewById(R.id.editText);
-            n.setText(result);
+            //EditText n = (EditText) findViewById(R.id.editText);
+            //n.setText(result);
+            System.out.println("onPostExecute()");
+            System.out.println(result);
 
             if(result.contains("OK")) {
+                System.out.println("Inside");
+                Entrar();
 
-                Intent intent = new Intent(this, Usuari.class);
-                EditText editText = (EditText) findViewById(R.id.editText);
-                String contra = editText.getText().toString();
-                intent.putExtra(EXTRA_MESSAGE, contra);
-
-                EditText editText2 = (EditText) findViewById(R.id.editText2);
-                String telf = editText.getText().toString();
-                intent.putExtra(EXTRA_MESSAGE2, telf);
-
-                startActivity(intent);
-            }
             }
         }
     }

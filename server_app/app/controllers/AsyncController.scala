@@ -34,14 +34,14 @@ class AsyncController @Inject()(cc: ControllerComponents, actorSystem: ActorSyst
    * will be called when the application receives a `GET` request with
    * a path of `/message`.
    */
-  def message(telf: String) = Action.async {
-    getFutureMessage(1.second,telf).map { msg => Ok(msg) }
+  def message(telf: String, pswd: String) = Action.async {
+    getFutureMessage(1.second,telf,pswd).map { msg => Ok(msg) }
   }
 
-  private def getFutureMessage(delayTime: FiniteDuration,telf: String): Future[String] = {
+  private def getFutureMessage(delayTime: FiniteDuration,telf: String,pswd: String): Future[String] = {
     val promise: Promise[String] = Promise[String]()
     actorSystem.scheduler.scheduleOnce(delayTime) {
-      promise.success("Input Telf: "+telf+";")
+      promise.success("Input Telf: "+telf+";"+"PAsword:"+pswd)
     }(actorSystem.dispatcher) // run scheduled tasks using the actor system's dispatcher
     promise.future
   }

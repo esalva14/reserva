@@ -108,13 +108,13 @@ public class MainActivity extends AppCompatActivity {
 
         System.out.println("connectServer()");
 
-        EditText editText = (EditText) findViewById(R.id.editText);
-        String contra = editText.getText().toString();
+        EditText telf_aux = (EditText) findViewById(R.id.editText);
+        String telf = telf_aux.getText().toString();
 
-        EditText editText2 = (EditText) findViewById(R.id.editText2);
-        String telf = editText.getText().toString();
+        EditText pswd_aux = (EditText) findViewById(R.id.editText2);
+        String pswd = pswd_aux.getText().toString();
 
-        String url="http://192.168.1.39:9000/message?telf="+telf;
+        String url="http://192.168.1.36:9000/message?telf="+telf+"&pswd="+pswd;
 
         //Aqui s'ha de posar la Ip de la xarxa local on estigui el Play.
         new login(this).execute(url);
